@@ -182,7 +182,7 @@ if archivo_subido is not None:
                 st.markdown("### Generación de Reportes Estructurados Predefinidos")
                 st.markdown("Haz clic en cualquiera de los botones para que el agente ejecute los análisis automatizados completos.")
                 
-                c_rep1, c_rep2 = st.columns(2)
+                c_rep1, c_rep2c_rep3 = st.columns(3)
                 
                 with c_rep1:
                     if st.button("📊 Generar Reporte de Información General", use_container_width=True):
