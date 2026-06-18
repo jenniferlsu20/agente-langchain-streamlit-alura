@@ -100,8 +100,7 @@ if archivo_cargado:
         tools=tools,
         verbose=True,
         handle_parsing_errors=True,
-        max_iterations=25,
-        max_execution_time=60.0,
+        max_iterations=15
     )
 
     # Acciones Rápidas
