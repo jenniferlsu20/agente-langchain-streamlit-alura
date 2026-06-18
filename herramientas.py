@@ -8,7 +8,6 @@ from langchain_core.output_parsers.string import StrOutputParser
 from langchain_experimental.tools import PythonAstREPLTool
 import streamlit as st
 
-from IPython.display import Markdown, display
 import matplotlib.pyplot as plt
 import seaborn as sns
 
