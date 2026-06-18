@@ -149,13 +149,17 @@ if archivo_subido is not None:
             with st.container(border=True):
                 st.markdown("### Realiza una pregunta sobre los datos")
                 pregunta_sobre_datos = st.text_input(
-                    "Escribe tu consulta:",
-                    placeholder="Ej. Cuál es el promedio de tiempo de entrega?",
+                    "Escribe tu consulta o instrucción de gráfico:",
+                    placeholder="Ej. Cuál es el promedio de tiempo de entrega? o Genera un gráfico de barras con el tiempo de entrega promedio por categoría",
                     key="input_pregunta_libre"
                 )
                 
                 if st.button("Responder pregunta", key="responder_pregunta_dato"):
                     if pregunta_sobre_datos:
+                        for img in ["grafica.png", "grafico.png", "chart.png"]:
+                            if os.path.exists(img):
+                                os.remove(img)
+                                
                         with st.spinner("Analizando los Datos..."):
                             # Contenedor visual dinámico para renderizar los pensamientos en la interfaz
                             contenedor_pasos = st.container()
@@ -174,6 +178,11 @@ if archivo_subido is not None:
                 if "ultima_respuesta_libre" in st.session_state:
                     st.markdown("#### 🎯 Respuesta Final:")
                     st.info(st.session_state["ultima_respuesta_libre"])
+                    
+                    for nombre_grafica in ["grafica.png", "grafico.png", "chart.png"]:
+                        if os.path.exists(nombre_grafica):
+                            st.image(nombre_grafica, caption="Gráfica Generada por la herramienta", width="stretch")
+       
 
         with tab_reportes:
             with st.container(border=True):
