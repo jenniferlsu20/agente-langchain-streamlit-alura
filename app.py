@@ -6,6 +6,7 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts.prompt import PromptTemplate
 from langchain_classic.agents.react.agent import create_react_agent
 from langchain_classic.agents.agent import AgentExecutor
+from langchain_community.callbacks.streamlit import StreamlitCallbackHandler
 from herramientas import crear_herramientas
 
 # Cofiguración de la página
