@@ -208,9 +208,35 @@ if archivo_subido is not None:
                                 {"callbacks": [st_callback_rep2]}
                             )
                             st.session_state["rep_est_res"] = res_est["output"]
-                            
+
                     if "rep_est_res" in st.session_state:
                         st.info(st.session_state["rep_est_res"])
 
+                with c_rep3:
+                    # Nueva Columna dedicada explícitamente a invocar la herramienta de gráficos
+                    if st.button("📈 Crear Gráfica Sugerida Automatizada", use_container_width=True):
+                        # Limpieza de imágenes residuales antiguas
+                        for img in ["grafica.png", "grafico.png", "chart.png"]:
+                            if os.path.exists(img):
+                                os.remove(img)
+                                
+                        with st.spinner("Identificando variables clave y diseñando gráfico..."):
+                            contenedor_pasos_rep3 = st.container()
+                            st_callback_rep3 = StreamlitCallbackHandler(contenedor_pasos_rep3)
+                            res_graf = orquestador.invoke(
+                                {"input": "Utiliza la herramienta de gráficos para generar una visualización sugerida que sea relevante para entender las variables principales del dataframe."},
+                                {"callbacks": [st_callback_rep3]}
+                            )
+                            st.session_state["rep_graf_res"] = res_graf["output"]
+                            
+                    if "rep_graf_res" in st.session_state:
+                        st.warning(st.session_state["rep_graf_res"])
+                        
+                        # Renderiza la gráfica generada por el clic automático
+                        for nombre_grafica in ["grafica.png", "grafico.png", "chart.png"]:
+                            if os.path.exists(nombre_grafica):
+                                st.image(nombre_grafica, caption="Visualización Sugerida Automatizada", use_container_width=True)
+                            
+                    
     except Exception as e:
         st.error(f"❌ Ocurrió un error inesperado al procesar el archivo CSV: {str(e)}")
