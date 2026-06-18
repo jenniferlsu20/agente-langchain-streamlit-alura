@@ -205,17 +205,24 @@ def crear_herramientas(df: pd.DataFrame, llm):
         return "Gráfico generado correctamente."
 
     # ── Herramienta 4: Ejecutar código Python sobre el df ───────────────
-    python_repl = PythonAstREPLTool(locals={"df": df})
-
-    herramienta_codigo_python = python_repl
-    herramienta_codigo_python.name = "Herramienta Codigos de Python"
-    herramienta_codigo_python.description = """
-                                            Utiliza esta herramienta cuando el usuario solicite cálculos, consultas o
-                                            transformaciones específicas con Python sobre el DataFrame (df). Ejemplos:
-                                            '¿Cuál es el promedio de la columna X?', '¿Valores únicos de la columna Y?',
-                                            '¿Correlación entre A y B?'. No la uses para resúmenes generales, estadísticos
-                                            completos o gráficos — para eso usa las herramientas específicas.
-                                            """
+    @tool("herramienta_codigo_python", return_direct=True)
+    def herramienta_codigo_python(codigo: str) -> str:
+        """
+        Utiliza esta herramienta cuando el usuario solicite cálculos, consultas o
+        transformaciones específicas con Python sobre el DataFrame (df). Ejemplos:
+        '¿Cuál es el promedio de la columna X?', '¿Valores únicos de la columna Y?',
+        '¿Correlación entre A y B?'. No la uses para resúmenes generales, estadísticos
+        completos o gráficos — para eso usa las herramientas específicas.
+        El input debe ser estrictamente código ejecutable de Python sobre el objeto `df`.
+        """
+        # Instanciamos el REPL de forma interna y aislada
+        repl = PythonAstREPLTool(locals={"df": df})
+        try:
+            # Ejecuta el código generado por el LLM (Ej: df['tiempo_entrega'].mean())
+            resultado = repl.run(codigo)
+            return f"Tras analizar los datos, el resultado del cálculo solicitado es: {resultado}"
+        except Exception as e:
+            return f"Ocurrió un error al ejecutar el código de Python: {str(e)}"
 
     return [
         informaciones_df,
