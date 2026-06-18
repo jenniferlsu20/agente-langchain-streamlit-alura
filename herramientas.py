@@ -14,7 +14,7 @@ import seaborn as sns
 load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-llm = ChatGroq(api_key=GROQ_API_KEY, model_name="llama3-70b-8192", temperature=0)
+llm = ChatGroq(api_key=GROQ_API_KEY, model_name="llama-3.1-8b-instant", temperature=0)
 
 
 # Herramientas
