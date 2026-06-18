@@ -93,9 +93,7 @@ if archivo_subido is not None:
         # Prompt react
         df_head = df.head().to_markdown()
 
-        prompt_react_es = PromptTemplate(
-            input_variables=["input", "agent_scratchpad", "tools", "tool_names"],
-            partial_variables={"df_head": df_head},
+        prompt_react_es = PromptTemplate.from_template(
             template="""
                     Eres un asistente experto en análisis de datos que responde OBLIGATORIAMENTE en castellano.
 
@@ -128,7 +126,7 @@ if archivo_subido is not None:
                     Question: {input}
                     Thought: {agent_scratchpad}
                     """,
-        )
+        ).partial(df_head=df_head)
 
         # Configuración del Agente y Orquestador
         agente = create_react_agent(llm=llm, tools=tools, prompt=prompt_react_es)
@@ -161,12 +159,12 @@ if archivo_subido is not None:
                         with st.spinner("Analizando los Datos..."):
                             # Contenedor visual dinámico para renderizar los pensamientos en la interfaz
                             contenedor_pasos = st.container()
-                            st_callback = StreamlitCallbackHandler(contenedor_pasos)
+                            st_callback = StreamlitCallbackHandler.from_streamlit_container(contenedor_pasos)
                             
                             # Invocación del agente pasando el manejador de callbacks de Streamlit
                             respuesta = orquestador.invoke(
                                 {"input": pregunta_sobre_datos},
-                                config={"callbacks": [st_callback]}
+                                callbacks=[st_callback]
                             )
                             st.session_state["ultima_respuesta_libre"] = respuesta["output"]
                     else:
@@ -182,7 +180,7 @@ if archivo_subido is not None:
                 st.markdown("### Generación de Reportes Estructurados Predefinidos")
                 st.markdown("Haz clic en cualquiera de los botones para que el agente ejecute los análisis automatizados completos.")
                 
-                c_rep1, c_rep2c_rep3 = st.columns(3)
+                c_rep1, c_rep2, c_rep3 = st.columns(3)
                 
                 with c_rep1:
                     if st.button("📊 Generar Reporte de Información General", use_container_width=True):
@@ -191,7 +189,7 @@ if archivo_subido is not None:
                             st_callback_rep1 = StreamlitCallbackHandler(contenedor_pasos_rep1)
                             res_info = orquestador.invoke(
                                 {"input": "Presenta el reporte de información general del dataframe, detallando dimensiones y tipos de datos."},
-                                config={"callbacks": [st_callback_rep1]}
+                                callbacks=[st_callback_rep1]
                             )
                             st.session_state["rep_info_res"] = res_info["output"]
                             
@@ -205,7 +203,7 @@ if archivo_subido is not None:
                             st_callback_rep2 = StreamlitCallbackHandler(contenedor_pasos_rep2)
                             res_est = orquestador.invoke(
                                 {"input": "Muestra el resumen estadístico descriptivo completo del dataframe e interpreta las variables numéricas."},
-                                config={"callbacks": [st_callback_rep2]}
+                                callbacks=[st_callback_rep2]
                             )
                             st.session_state["rep_est_res"] = res_est["output"]
 
@@ -225,7 +223,7 @@ if archivo_subido is not None:
                             st_callback_rep3 = StreamlitCallbackHandler(contenedor_pasos_rep3)
                             res_graf = orquestador.invoke(
                                 {"input": "Utiliza la herramienta de gráficos para generar una visualización sugerida que sea relevante para entender las variables principales del dataframe."},
-                                config={"callbacks": [st_callback_rep3]}
+                                callbacks=[st_callback_rep3]
                             )
                             st.session_state["rep_graf_res"] = res_graf["output"]
                             
