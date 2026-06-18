@@ -145,7 +145,7 @@ if archivo_subido is not None:
         st.markdown("## 🧠 Interacción con el Agente de Datos")
         
         # Organización de la salida del Agente mediante Pestañas Elegantes
-        tab_preguntas, tab_reportes = st.tabs(["🔍 Consultas Libres", "📊 Reportes de un Clic"])
+        tab_preguntas, tab_reportes = st.tabs(["🔍 Consultas Libres", "📊 Reportes e Indicadores de un Clic"])
         
         with tab_preguntas:
             with st.container(border=True):
@@ -166,7 +166,7 @@ if archivo_subido is not None:
                             # Invocación del agente pasando el manejador de callbacks de Streamlit
                             respuesta = orquestador.invoke(
                                 {"input": pregunta_sobre_datos},
-                                {"callbacks": [st_callback]}
+                                config={"callbacks": [st_callback]}
                             )
                             st.session_state["ultima_respuesta_libre"] = respuesta["output"]
                     else:
@@ -191,7 +191,7 @@ if archivo_subido is not None:
                             st_callback_rep1 = StreamlitCallbackHandler(contenedor_pasos_rep1)
                             res_info = orquestador.invoke(
                                 {"input": "Presenta el reporte de información general del dataframe, detallando dimensiones y tipos de datos."},
-                                {"callbacks": [st_callback_rep1]}
+                                config={"callbacks": [st_callback_rep1]}
                             )
                             st.session_state["rep_info_res"] = res_info["output"]
                             
@@ -205,7 +205,7 @@ if archivo_subido is not None:
                             st_callback_rep2 = StreamlitCallbackHandler(contenedor_pasos_rep2)
                             res_est = orquestador.invoke(
                                 {"input": "Muestra el resumen estadístico descriptivo completo del dataframe e interpreta las variables numéricas."},
-                                {"callbacks": [st_callback_rep2]}
+                                config={"callbacks": [st_callback_rep2]}
                             )
                             st.session_state["rep_est_res"] = res_est["output"]
 
@@ -225,7 +225,7 @@ if archivo_subido is not None:
                             st_callback_rep3 = StreamlitCallbackHandler(contenedor_pasos_rep3)
                             res_graf = orquestador.invoke(
                                 {"input": "Utiliza la herramienta de gráficos para generar una visualización sugerida que sea relevante para entender las variables principales del dataframe."},
-                                {"callbacks": [st_callback_rep3]}
+                                config={"callbacks": [st_callback_rep3]}
                             )
                             st.session_state["rep_graf_res"] = res_graf["output"]
                             
