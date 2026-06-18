@@ -12,7 +12,7 @@ from herramientas import crear_herramientas
 st.set_page_config(
     page_title="Asistente de Análisis de Datos con IA", layout="centered"
 )
-st.title("## 🐦 Asistente de Análisis de Datos con IA")
+st.title("🐦 Asistente de Análisis de Datos con IA")
 
 # Descripción de la herramienta
 st.info("""
