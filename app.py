@@ -60,33 +60,36 @@ if archivo_cargado:
         input_variables=["input", "agent_scratchpad", "tools", "tool_names"],
         partial_variables={"df_head": df_head},
         template="""
-                Eres un asistente que responde en castellano.
+                Eres un asistente experto en análisis de datos que responde OBLIGATORIAMENTE en castellano.
 
                 Tienes acceso a un dataframe pandas llamado `df`.
-                Aquí están las primeras filas del DataFrame, obtenidas usando `df.head().to_markdown()`:
+                Aquí están las primeras filas del DataFrame:
 
                 {df_head}
 
-                Responde a las siguientes preguntas de la mejor manera posible.
-                Para este fin, tienes acceso a las siguientes herraminetas:
+                Debes responder a la pregunta del usuario utilizando las herramientas disponibles.
+                Tienes acceso a las siguientes herramientas:
 
                 {tools}
 
-                Usa el siguiente formato:
+                REGLA CRÍTICA DE FORMATO: 
+                Debes usar ESTRICTAMENTE las palabras 'Thought:', 'Action:', 'Action Input:', 'Observation:' y 'Final Answer:'. NO LAS TRADUZCAS al español. El sistema interno de LangChain las necesita en inglés. Sin embargo, todo el texto explicativo dentro de ellas DEBE estar en español.
 
-                Question: La pregunta de entrada que debes responder
-                Thought: Debes siempre pensar en lo que debes hacer
-                Action: La acción que será ejecutada, debe ser una de las [{tool_names}]
-                Action Input: La entrada para la acción
-                Observation: El resultado de la acción
-                ... (este Thought/Action/Action Input/Observation puede repetirse N veces)
-                Thought: Ahora sé la respuesta final
-                Final Answer: La respuesta final para la pregunta de entrada inicial.
+                Usa el siguiente formato exacto:
 
-                Comienza!
+                Question: La pregunta que debes responder.
+                Thought: Tu pensamiento en español sobre lo que debes hacer a continuación.
+                Action: El nombre de la herramienta a usar, debe ser exactamente una de [{tool_names}].
+                Action Input: La entrada exacta para la herramienta. Si usas 'herramienta_codigo_python', escribe SOLO el código de Python puro en una línea, sin bloques de código ``` ni comillas.
+                Observation: El resultado de la acción (esto lo provee el sistema de forma automática).
+                ... (este ciclo de Thought/Action/Action Input/Observation se puede repetir si es necesario)
+                Thought: Pensamiento en español indicando que ya conoces la respuesta final.
+                Final Answer: La respuesta final detallada en castellano para el usuario.
+
+                ¡Comienza!
 
                 Question: {input}
-                Thought:{agent_scratchpad}
+                Thought: {agent_scratchpad}
                 """,
     )
 
