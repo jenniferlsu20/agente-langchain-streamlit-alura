@@ -163,9 +163,7 @@ if archivo_subido is not None:
                         with st.spinner("Analizando los Datos..."):
                             # Contenedor visual dinámico para renderizar los pensamientos en la interfaz
                             contenedor_pasos = st.container()
-                            st_callback = StreamlitCallbackHandler(container=contenedor_pasos,
-                                                                   expand_new_thoughts=True,
-                                                                   collapse_completed_thoughts=False)
+                            st_callback = StreamlitCallbackHandler(contenedor_pasos)
                             
                             # Invocación del agente pasando el manejador de callbacks de Streamlit
                             respuesta = orquestador.invoke(
@@ -197,8 +195,7 @@ if archivo_subido is not None:
                     if st.button("📊 Generar Reporte de Información General", use_container_width=True):
                         with st.spinner("Compilando estructura general..."):
                             contenedor_pasos_rep1 = st.container()
-                            st_callback_rep1 = StreamlitCallbackHandler(container=contenedor_pasos_rep1,
-                                                                        expand_new_thoughts=True)
+                            st_callback_rep1 = StreamlitCallbackHandler(contenedor_pasos_rep1)
                             res_info = orquestador.invoke(
                                 {"input": "Presenta el reporte de información general del dataframe, detallando dimensiones y tipos de datos."},
                                 callbacks=[st_callback_rep1]
@@ -212,8 +209,7 @@ if archivo_subido is not None:
                     if st.button("🔢 Generar Resumen Estadístico Completo", use_container_width=True):
                         with st.spinner("Calculando estadísticas descriptivas..."):
                             contenedor_pasos_rep2 = st.container()
-                            st_callback_rep2 = StreamlitCallbackHandler(container=contenedor_pasos_rep2,
-                                                                        expand_new_thoughts=True)
+                            st_callback_rep2 = StreamlitCallbackHandler(contenedor_pasos_rep2)
                             res_est = orquestador.invoke(
                                 {"input": "Muestra el resumen estadístico descriptivo completo del dataframe e interpreta las variables numéricas."},
                                 callbacks=[st_callback_rep2]
@@ -233,8 +229,7 @@ if archivo_subido is not None:
                                 
                         with st.spinner("Identificando variables clave y diseñando gráfico..."):
                             contenedor_pasos_rep3 = st.container()
-                            st_callback_rep3 = StreamlitCallbackHandler(container=contenedor_pasos_rep3,
-                                                                        expand_new_thoughts=True)
+                            st_callback_rep3 = StreamlitCallbackHandler(contenedor_pasos_rep3)
                             res_graf = orquestador.invoke(
                                 {"input": "Utiliza la herramienta de gráficos para generar una visualización sugerida que sea relevante para entender las variables principales del dataframe."},
                                 callbacks=[st_callback_rep3]
